@@ -87,7 +87,7 @@
       </property>
      </spacer>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QGroupBox" name="groupBox">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -116,7 +116,7 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -127,7 +127,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QGridLayout" name="gridLayout">
         <item row="1" column="3" rowspan="2">
          <widget class="QPushButton" name="processBtn">
@@ -163,7 +163,7 @@
          </widget>
         </item>
         <item row="1" column="1" rowspan="2">
-         <widget class="QLineEdit" name="lineEdit_2"/>
+         <widget class="QLineEdit" name="axisY"/>
         </item>
         <item row="0" column="1">
          <widget class="QLabel" name="label_2">
@@ -173,7 +173,7 @@
          </widget>
         </item>
         <item row="1" column="0" rowspan="2">
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="axisX"/>
         </item>
         <item row="1" column="2">
          <spacer name="horizontalSpacer_2">
@@ -195,7 +195,7 @@
       </widget>
      </widget>
     </item>
-    <item row="4" column="0">
+    <item row="6" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QWidget" name="widget" native="true">
@@ -240,25 +240,18 @@
       </item>
      </layout>
     </item>
+    <item row="5" column="0">
+     <widget class="QProgressBar" name="progressBar">
+      <property name="value">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
    </layout>
-   <zorder>selectImgBtn</zorder>
-   <zorder>imgLineEdit</zorder>
-   <zorder>widget</zorder>
-   <zorder>widget_2</zorder>
-   <zorder>horizontalSpacer</zorder>
    <zorder>groupBox</zorder>
-   <zorder>widget</zorder>
-   <zorder>horizontalSpacer_2</zorder>
    <zorder>splitter</zorder>
-   <zorder>horizontalSpacer_2</zorder>
-   <zorder>horizontalSpacer_3</zorder>
    <zorder>horizontalSpacer_4</zorder>
-   <zorder>label</zorder>
-   <zorder>label_2</zorder>
-   <zorder>lineEdit</zorder>
-   <zorder>lineEdit_2</zorder>
-   <zorder>horizontalSpacer_5</zorder>
-   <zorder>horizontalSpacer_6</zorder>
+   <zorder>progressBar</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

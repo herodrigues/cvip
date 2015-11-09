@@ -24,5 +24,7 @@ HEADERS  += qt/mainwindow.h \
 
 FORMS    += qt/mainwindow.ui
 
-RESOURCES += \
-    resources.qrc
+RESOURCES +=
+
+DISTFILES += \
+    img/tux.png

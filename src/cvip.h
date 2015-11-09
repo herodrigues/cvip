@@ -22,7 +22,7 @@ namespace cvip {
 
             for(int col = 0; col != dst.cols; ++col) {
                 int x = static_cast<int>(col * x_ratio);
-                float const x_diff = (col * x_ratio) - x; //distance of the nearet pixel(x axis)
+                float const x_diff = (col * x_ratio) - x; //distance of the nearest pixel(x axis)
                 float const x_diff_2 = 1 - x_diff;
                 float const y2_cross_x2 = y_diff_2 * x_diff_2;
                 float const y2_cross_x = y_diff_2 * x_diff;

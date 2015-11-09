@@ -26,8 +26,20 @@ void MainWindow::on_selectImgBtn_clicked()
 
 void MainWindow::on_processBtn_clicked()
 {
+    float axis_X = ui->axisX->text().toFloat();
+    float axis_Y = ui->axisY->text().toFloat();
+
     if(ui->rbBilinear->isChecked()) {
-        cv::Mat_<cv::Vec3b> bilinear = cvip::bilinear_interpolation(inputImage, cv::Size(), 2.0, 2.0);
+        cv::Mat_<cv::Vec3b> bilinear = cvip::bilinear_interpolation(inputImage, cv::Size(), axis_X, axis_Y);
+        cv::imwrite("../img/tux-mod.png", bilinear);
         //std::cout << bilinear;
     }
 }
+
+void MainWindow::TimerEvent()
+{
+    std::cout << "Timer event." << std::endl;
+    int value = this->ui->progressBar->value();
+    this->ui->progressBar->setValue(value+1);
+}
+

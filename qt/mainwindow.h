@@ -25,6 +25,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
     cv::Mat_<cv::Vec3b> inputImage;
 };
 
