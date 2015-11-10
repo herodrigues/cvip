@@ -27,4 +27,5 @@ FORMS    += qt/mainwindow.ui
 RESOURCES +=
 
 DISTFILES += \
-    img/tux.png
+    img/tux.png \
+    README.md

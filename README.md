@@ -1,28 +1,28 @@
 # cvip
 
-A bunch of basic image processing algorithms using OpenCV and C++
+Vários algoritmos de processamento de imagens utilizando OpenCV e C++
 
-What's included?
-- Bilinear interpolation
-- Nearest-neighbor interpolation
+Algoritmos inclusos:
+- Interpolação bilinear
+- Interpolação do vizinho mais próximo
 
-Installation
+Como usar
 -------------
 
 - Linux: 
 
-Download the executable file here: https://github.com/herodrigues/cvip/blob/master/cvip
+Faça o download do executável [aqui](https://github.com/herodrigues/cvip/blob/master/cvip)
 
-Open a terminal and run:
+Abra o terminal e execute:
 ```bash
 $ chmod a+x cvip
 $ ./cvip
 ```
 - Windows
 
-Soon
+Em breve
 
-Documentation
+Documentação
 -------------
 
 Soon
