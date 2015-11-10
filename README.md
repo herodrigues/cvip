@@ -20,7 +20,7 @@ $ ./cvip
 ```
 - Windows
 
-Download the executable file here: https://github.com/herodrigues/cvip/blob/master/cvip.exe and double click on it.
+Soon
 
 Documentation
 -------------
