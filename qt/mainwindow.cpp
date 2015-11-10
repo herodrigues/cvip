@@ -6,6 +6,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    myBtnGroup = new QButtonGroup();
+
+    myBtnGroup->addButton(ui->rbBilinear, 0);
+    myBtnGroup->addButton(ui->rbNeighbor, 1);
 }
 
 MainWindow::~MainWindow()
@@ -15,31 +20,60 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_selectImgBtn_clicked()
 {
-    QString file_name = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("Images (*.png *.xpm *.jpg)"));
-    ui->imgLineEdit->setText(file_name);
+    file_name = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("Images (*.png *.xpm *.jpg)"));
 
-    QPixmap pixmap(file_name);
-    ui->sourceImg->setPixmap(pixmap);
+    if(!file_name.isEmpty()) {
+        ui->imgLineEdit->setText(file_name);
+        ui->sourceImg->setPixmap(QPixmap(file_name));
 
-    inputImage = cv::imread(file_name.toStdString());
+        src_image = cv::imread(file_name.toStdString());
+        ui->srcImgProperty->setText("Width: " + QString::number(src_image.cols) + "px | Height: " + QString::number(src_image.rows) + "px");
+    }
 }
 
 void MainWindow::on_processBtn_clicked()
 {
-    float axis_X = ui->axisX->text().toFloat();
-    float axis_Y = ui->axisY->text().toFloat();
+    if(validate()) {
+        double width = ui->axisX->text().toDouble();
+        double height = ui->axisY->text().toDouble();
+        ui->modImgProperty->setText("Width: " + QString::number(width) + "px | Height: " + QString::number(height) + "px");
 
-    if(ui->rbBilinear->isChecked()) {
-        cv::Mat_<cv::Vec3b> bilinear = cvip::bilinear_interpolation(inputImage, cv::Size(), axis_X, axis_Y);
-        cv::imwrite("../img/tux-mod.png", bilinear);
-        //std::cout << bilinear;
+        cv::Mat_<cv::Vec3b> output;
+
+        switch(myBtnGroup->checkedId()) {
+            case 0:
+                output = cvip::interpolation::bilinear(src_image, width, height);
+                cv::imwrite("../img/output.jpg", output);
+
+                ui->modifiedImg->setPixmap(QPixmap("../img/output.jpg"));
+
+                break;
+           case 1:
+                output = cvip::interpolation::nearest_neighbor(src_image, width, height);
+                cv::imwrite("../img/output.jpg", output);
+
+                ui->modifiedImg->setPixmap(QPixmap("../img/output.jpg"));
+                break;
+        }
     }
 }
 
-void MainWindow::TimerEvent()
-{
-    std::cout << "Timer event." << std::endl;
-    int value = this->ui->progressBar->value();
-    this->ui->progressBar->setValue(value+1);
-}
+bool MainWindow::validate() {
 
+    if(file_name.isEmpty()) {
+        QMessageBox::warning(this, "Alert!", "Select an image!");
+        return false;
+    }
+
+    if(myBtnGroup->checkedId() == -1) {
+        QMessageBox::warning(this, "Alert!", "Select at least one method!");
+        return false;
+    }
+
+    if(ui->axisX->text().isEmpty() || ui->axisY->text().isEmpty()) {
+        QMessageBox::warning(this, "Alert!", "Width and height should have a value!");
+        return false;
+    }
+
+    return true;
+}

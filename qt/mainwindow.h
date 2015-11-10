@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QFileDialog>
-#include <QAbstractButton>
+#include <QMessageBox>
+#include <QButtonGroup>
+#include <QScrollArea>
 
 #include "src/cvip.h"
 
@@ -25,8 +27,11 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QButtonGroup *myBtnGroup;
+    cv::Mat_<cv::Vec3b> src_image;
+    QString file_name;
 
-    cv::Mat_<cv::Vec3b> inputImage;
+    bool validate();
 };
 
 #endif // MAINWINDOW_H
