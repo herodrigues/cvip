@@ -55,7 +55,7 @@ Graficamente, temos a seguinte situação:
 
 Agora só é necessário aplicar a equação da interpolação bilinear para cada linha.
 
-![](img/bilinear_interpolation_equation.png)
+![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/bilinear_interpolation_equation.png)
 
 Onde Q11 = x1_y1, Q12 = x1_y2, Q21 = x2_y1 e Q22 = x2_y2
 
@@ -70,4 +70,4 @@ Abaixo temos uma imagem ampliada e reduzida utilizando interpolação bilinar.
 
 |  Original (100x100)  |  Reduzida (50x50)  | Ampliada (500x500) |
 | :---: | :-----: | :---: |
-| ![](img/tux.jpg) |  ![](img/tux-bilinear-50.jpg) | ![](img/tux-bilinear-500.jpg)  |
+| ![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/tux.jpg) |  ![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/tux-bilinear-50.jpg) | ![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/tux-bilinear-500.jpg)  |
