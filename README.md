@@ -4,14 +4,14 @@ Vários algoritmos de processamento de imagens utilizando OpenCV e C++
 
 Algoritmos inclusos:
 - Interpolação bilinear
-- Interpolação do vizinho mais próximo
+- Interpolação por vizinho mais próximo
 
 Como usar
 -------------
 
 - Linux: 
 
-Faça o download do executável [aqui](https://github.com/herodrigues/cvip/blob/master/cvip)
+Faça o download do executável [aqui](https://github.com/herodrigues/cvip/raw/master/cvip)
 
 Abra o terminal e execute:
 ```bash
@@ -20,9 +20,10 @@ $ ./cvip
 ```
 - Windows
 
-Em breve
+Faça o download do arquivo .exe [aqui](https://github.com/herodrigues/cvip/raw/master/cvip.exe).
 
 Documentação
 -------------
 
-Soon
+- [Interpolação bilinear](doc/bilinear-interpolation.md)
+- [Interpolação por vizinho mais próximo](doc/nearest-neighbor-interpolation)
