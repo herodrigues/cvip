@@ -31,10 +31,10 @@ desejado da imagem somado à coluna atual receberá o ponto do eixo Y acima do p
 
 Graficamente, temos:
 
-![](img/nearest_neighbour_chart.png)
+![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/nearest_neighbour_chart.png)
 
 Abaixo temos uma imagem ampliada e reduzida utilizando interpolação por vizinho mais próximo.
 
 |  Original (100x100)  |  Reduzida (50x50)  | Ampliada (500x500) |
 | :---: | :-----: | :---: |
-| ![](img/tux.jpg) |  ![](img/tux-nearest-50.jpg) | ![](img/tux-nearest-500.jpg)  |
+| ![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/tux.jpg) |  ![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/tux-nearest-50.jpg) | ![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/tux-nearest-500.jpg)  |
