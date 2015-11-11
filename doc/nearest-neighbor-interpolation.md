@@ -31,7 +31,7 @@ desejado da imagem somado à coluna atual receberá o ponto do eixo Y acima do p
 
 Graficamente, temos:
 
-![](https://raw.githubusercontent.com/herodrigues/cvip/master/img/nearest_neighbour_chart.png)
+<img src="https://raw.githubusercontent.com/herodrigues/cvip/master/img/nearest_neighbour_chart.png" width="200">
 
 Abaixo temos uma imagem ampliada e reduzida utilizando interpolação por vizinho mais próximo.
 
