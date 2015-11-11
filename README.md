@@ -26,4 +26,4 @@ Documentação
 -------------
 
 - [Interpolação bilinear](doc/bilinear-interpolation.md)
-- [Interpolação por vizinho mais próximo](doc/nearest-neighbor-interpolation)
+- [Interpolação por vizinho mais próximo](doc/nearest-neighbor-interpolation.md)
