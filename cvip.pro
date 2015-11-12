@@ -11,8 +11,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = cvip
 TEMPLATE = app
 
-INCLUDEPATH += /usr/local/include/opencv
-LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
+win32 {
+    TARGET = cvip.exe
+    INCLUDEPATH += "C:\MinGW\include\opencv"
+    LIBS += -L"C:\MinGW\lib" -lopencv_core -lopencv_imgcodecs -lopencv_highgui
+}
+
+unix {
+    TARGET = cvip
+    INCLUDEPATH += /usr/local/include/opencv
+    LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
+}
 
 QMAKE_CXXFLAGS += -std=c++0x
 
@@ -28,4 +37,5 @@ RESOURCES +=
 
 DISTFILES += \
     img/tux.png \
-    README.md
+    README.md \
+    .gitignore
