@@ -7,6 +7,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->sliderHeight, SIGNAL(valueChanged(int)), this, SLOT(process()));
+    connect(ui->sliderWidth, SIGNAL(valueChanged(int)), this, SLOT(process()));
+
     myBtnGroup = new QButtonGroup();
 
     myBtnGroup->addButton(ui->rbBilinear, 0);
@@ -24,32 +27,31 @@ void MainWindow::on_selectImgBtn_clicked()
 
     if(!file_name.isEmpty()) {
         ui->imgLineEdit->setText(file_name);
-        ui->sourceImg->setPixmap(QPixmap(file_name));
-
+        ui->modifiedImg->setPixmap(QPixmap(file_name));
         src_image = cv::imread(file_name.toStdString());
-        ui->srcImgProperty->setText("Width: " + QString::number(src_image.cols) + "px | Height: " + QString::number(src_image.rows) + "px");
     }
 }
 
-void MainWindow::on_processBtn_clicked()
+void MainWindow::process()
 {
+    double width = ui->sliderWidth->value();
+    double height = ui->sliderHeight->value();
+
     if(validate()) {
-        double width = ui->axisX->text().toDouble();
-        double height = ui->axisY->text().toDouble();
-        ui->modImgProperty->setText("Width: " + QString::number(width) + "px | Height: " + QString::number(height) + "px");
+        ui->modImgProperty->setText("Width: " + QString::number(width) + "% | Height: " + QString::number(height) + "%");
 
         cv::Mat_<cv::Vec3b> output;
 
         switch(myBtnGroup->checkedId()) {
             case 0:
-                output = cvip::interpolation::bilinear(src_image, width, height);
+                output = cvip::bilinear(src_image, width, height);
                 cv::imwrite("../img/output.jpg", output);
 
                 ui->modifiedImg->setPixmap(QPixmap("../img/output.jpg"));
 
                 break;
            case 1:
-                output = cvip::interpolation::nearest_neighbor(src_image, width, height);
+                output = cvip::nearest_neighbor(src_image, width, height);
                 cv::imwrite("../img/output.jpg", output);
 
                 ui->modifiedImg->setPixmap(QPixmap("../img/output.jpg"));
@@ -61,17 +63,12 @@ void MainWindow::on_processBtn_clicked()
 bool MainWindow::validate() {
 
     if(file_name.isEmpty()) {
-        QMessageBox::warning(this, "Alert!", "Select an image!");
+        QMessageBox::warning(this, "Alerta!", "Selecione uma imagem!");
         return false;
     }
 
     if(myBtnGroup->checkedId() == -1) {
-        QMessageBox::warning(this, "Alert!", "Select at least one method!");
-        return false;
-    }
-
-    if(ui->axisX->text().isEmpty() || ui->axisY->text().isEmpty()) {
-        QMessageBox::warning(this, "Alert!", "Width and height should have a value!");
+        QMessageBox::warning(this, "Alerta!", "Selecione um método!");
         return false;
     }
 

@@ -13,7 +13,7 @@ TEMPLATE = app
 
 win32 {
     TARGET = cvip.exe
-    INCLUDEPATH += "C:\MinGW\include\opencv"
+    INCLUDEPATH += "C:\Qt\Qt5.5.1\5.5\mingw492_32\include\opencv"
     LIBS += -L"C:\MinGW\lib" -lopencv_core -lopencv_imgcodecs -lopencv_highgui
 }
 

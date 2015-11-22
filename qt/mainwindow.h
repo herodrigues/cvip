@@ -23,7 +23,7 @@ public:
 
 private slots:
     void on_selectImgBtn_clicked();
-    void on_processBtn_clicked();
+    void process();
 
 private:
     Ui::MainWindow *ui;
