@@ -59,7 +59,7 @@
          </sizepolicy>
         </property>
         <property name="title">
-         <string>Ampliação/Redução</string>
+         <string>Interpolação</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -72,7 +72,7 @@
          <item>
           <widget class="QRadioButton" name="rbNeighbor">
            <property name="text">
-            <string>Interpolação do vizinho mais próximo</string>
+            <string>Interpolação por vizinho mais próximo</string>
            </property>
           </widget>
          </item>
@@ -233,7 +233,7 @@
               </spacer>
              </item>
              <item>
-              <widget class="QRadioButton" name="radioButton">
+              <widget class="QRadioButton" name="rbHFlip">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -246,7 +246,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="radioButton_2">
+              <widget class="QRadioButton" name="rbVFlip">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -270,68 +270,72 @@
         <property name="title">
          <string>Distância</string>
         </property>
+        <widget class="QWidget" name="">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>30</y>
+           <width>401</width>
+           <height>35</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetMaximumSize</enum>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>X</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Y</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_2"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>=</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineEdit_3"/>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
     </item>
     <item>
-     <widget class="QWidget" name="widget_2" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QScrollArea" name="scrollArea_2">
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents_4">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>411</width>
-            <height>437</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
-            <widget class="QLabel" name="modifiedImg">
-             <property name="text">
-              <string>Imagem modificada</string>
-             </property>
-             <property name="scaledContents">
-              <bool>false</bool>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-          <zorder>modifiedImg</zorder>
-          <zorder>horizontalSlider_2</zorder>
-          <zorder>horizontalSlider</zorder>
-          <zorder>label_3</zorder>
-          <zorder>label_4</zorder>
-          <zorder>label_4</zorder>
-         </widget>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="modImgProperty">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Propriedades da imagem modificada</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+     <widget class="QLabel" name="modifiedImg">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
    </layout>
@@ -384,25 +388,7 @@
   <tabstop>imgLineEdit</tabstop>
   <tabstop>selectImgBtn</tabstop>
   <tabstop>rbBilinear</tabstop>
-  <tabstop>scrollArea_2</tabstop>
  </tabstops>
  <resources/>
- <connections>
-  <connection>
-   <sender>actionQuit</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>334</x>
-     <y>210</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -17,6 +17,11 @@
  */
 namespace cvip {
 
+    enum {
+        FLIP_HORIZONTAL,
+        FLIP_VERTICAL
+    };
+
     /**
      * Aplica a interpolação bilinear na matriz de origem da imagem de
      * a matriz resultante
@@ -90,6 +95,39 @@ namespace cvip {
                 point.y = static_cast<int>(row * ratio_y);
                 output((row * output.cols) + col) = src_img((point.y * src_img.cols) + point.x);
             }
+        }
+
+        return output;
+    }
+
+    /**
+     * Aplica o espelhamento horizontal ou vertical
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @param flip_code Flag indicando qual flip será realizado (horizontal ou vertical)
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> flip(cv::Mat_<T> &src_img, int flip_code) {
+
+        cv::Mat_<T> output = cv::Mat_<T>(src_img.rows, src_img.cols);
+        int width = output.rows;
+        int height = output.cols;
+
+        switch(flip_code) {
+            case 0: {
+                for(int row = 0; row < width; row++)
+                    for(int col = 0; col < height; col++)
+                        output(row, col) = src_img(row, height - col - 1);
+                break;
+            }
+            case 1: {
+                for(int row = 0; row < width; row++)
+                    for(int col = 0; col < height; col++)
+                        output(row, col) = src_img(width - row - 1, col);
+                break;
+            }
+            break;
         }
 
         return output;

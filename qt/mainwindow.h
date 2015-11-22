@@ -5,7 +5,11 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QButtonGroup>
-#include <QScrollArea>
+#include <QImage>
+#include <QStatusBar>
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QPainter>
 
 #include "src/cvip.h"
 
@@ -22,16 +26,23 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_selectImgBtn_clicked();
-    void process();
+    void resize_image();
+    void flip_image();
+    void select_image();
+
+protected:
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     Ui::MainWindow *ui;
-    QButtonGroup *myBtnGroup;
     cv::Mat_<cv::Vec3b> src_image;
+    cv::Mat_<cv::Vec3b> dst_image;
+    QButtonGroup *button_group;
     QString file_name;
+    QPixmap pixmap;
 
     bool validate();
+    void save_image();
 };
 
 #endif // MAINWINDOW_H

@@ -23,7 +23,7 @@ unix {
     LIBS += -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_highgui
 }
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -Wswitch-enum
 
 SOURCES += main.cpp\
         qt/mainwindow.cpp
@@ -38,4 +38,5 @@ RESOURCES +=
 DISTFILES += \
     img/tux.png \
     README.md \
-    .gitignore
+    .gitignore \
+    doc/*
