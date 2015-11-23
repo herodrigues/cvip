@@ -132,6 +132,20 @@ namespace cvip {
 
         return output;
     }
+
+    /**
+     * Calcula a distância euclidiana entr dois pontos
+     *
+     * @param x1 Coordenada x do ponto P1
+     * @param y1 Coordenada y do ponto P1
+     * @param x2 Coordenada x do ponto P2
+     * @param y2 Coordenada x do ponto P2
+     * @return Resultado da distância euclidiana
+     */
+    template<typename T>
+    double euclidean_distance(T x1, T y1, T x2, T y2) {
+        return sqrt( pow(x1-x2, 2) + pow(y1-y2, 2) );
+    }
 }
 
 #endif // CVIP_H
