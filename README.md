@@ -5,6 +5,7 @@ Vários algoritmos de processamento de imagens utilizando OpenCV e C++
 Algoritmos inclusos:
 - Interpolação bilinear
 - Interpolação por vizinho mais próximo
+- Flip horizontal e vertical
 
 Como usar
 -------------
