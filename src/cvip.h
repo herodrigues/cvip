@@ -134,17 +134,113 @@ namespace cvip {
     }
 
     /**
-     * Calcula a distância euclidiana entr dois pontos
+     * Rotaciona a imagem
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @param angle Ângulo de rotação
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> rotate(cv::Mat_<T> &src_img, double angle) {
+
+        cv::Mat_<T> output = cv::Mat_<T>(src_img.rows, src_img.cols);
+        int width = output.rows;
+        int height = output.cols;
+
+        double cos_a = cos(angle * M_PI / 180);
+        double sin_a = sin(angle * M_PI / 180);
+
+        for(int row = 0; row < width; row++)
+            for(int col = 0; col < height; col++)
+                output(row, col) = src_img(row * cos_a + col * sin_a, col * cos_a - sin_a);
+
+        return output;
+    }
+
+    /**
+     * Adiciona uma imagem a outra
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @param tmp_img Referência para a matriz que será adicionada a src_img
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> addition(cv::Mat_<T> &src_img, cv::Mat_<T> &tmp_img) {
+
+        cv::Mat_<T> output = cv::Mat_<T>(src_img.rows, src_img.cols);
+        int width = src_img.rows;
+        int height = src_img.cols;
+
+
+        for(int row = 0; row < width; row++)
+            for(int col = 0; col < height; col++)
+                output(row, col) = src_img(row, col) + tmp_img(row, col);
+
+        return output;
+    }
+
+    /**
+     * Subtrai uma imagem de outra
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @param tmp_img Referência para a matriz que será subtraída de src_img
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> subtraction(cv::Mat_<T> &src_img, cv::Mat_<T> &tmp_img) {
+
+        cv::Mat_<T> output = cv::Mat_<T>(src_img.rows, src_img.cols);
+        int width = src_img.rows;
+        int height = src_img.cols;
+
+
+        for(int row = 0; row < width; row++)
+            for(int col = 0; col < height; col++)
+                output(row, col) = src_img(row, col) - tmp_img(row, col);
+
+        return output;
+    }
+
+    /**
+     * Calcula a distância euclidiana entre dois pontos
      *
      * @param x1 Coordenada x do ponto P1
      * @param y1 Coordenada y do ponto P1
      * @param x2 Coordenada x do ponto P2
-     * @param y2 Coordenada x do ponto P2
+     * @param y2 Coordenada y do ponto P2
      * @return Resultado da distância euclidiana
      */
     template<typename T>
-    double euclidean_distance(T x1, T y1, T x2, T y2) {
+    inline T euclidean_distance(T x1, T y1, T x2, T y2) {
         return sqrt( pow(x1-x2, 2) + pow(y1-y2, 2) );
+    }
+
+    /**
+     * Calcula a distância D4 (City-Block)
+     *
+     * @param x1 Coordenada x do ponto P1
+     * @param y1 Coordenada y do ponto P1
+     * @param x2 Coordenada x do ponto P2
+     * @param y2 Coordenada y do ponto P2
+     * @return Resultado da distância D4
+     */
+    template<typename T>
+    inline T city_block_distance(T x1, T y1, T x2, T y2) {
+        return abs(x1-x2) + abs(y1-y2);
+    }
+
+    /**
+     * Calcula a distância D8 (Chessboard)
+     *
+     * @param x1 Coordenada x do ponto P1
+     * @param y1 Coordenada y do ponto P1
+     * @param x2 Coordenada x do ponto P2
+     * @param y2 Coordenada y do ponto P2
+     * @return Resultado da distância D8
+     */
+    template<typename T>
+    inline T chessboard_distance(T x1, T y1, T x2, T y2) {
+        return std::max(abs(x1-x2), abs(y1-y2));
     }
 }
 

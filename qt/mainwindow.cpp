@@ -7,17 +7,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->selectImgBtn, SIGNAL(clicked(bool)), this, SLOT(select_image()));
     connect(ui->sliderHeight, SIGNAL(valueChanged(int)), this, SLOT(resize_image()));
     connect(ui->sliderWidth, SIGNAL(valueChanged(int)), this, SLOT(resize_image()));
     connect(ui->rbHFlip, SIGNAL(clicked(bool)), this, SLOT(flip_image()));
     connect(ui->rbVFlip, SIGNAL(clicked(bool)), this, SLOT(flip_image()));
+    connect(ui->sliderRotation, SIGNAL(valueChanged(int)), this, SLOT(rotate_image()));
+    connect(ui->actionOpenImage, SIGNAL(triggered(bool)),this, SLOT(select_image()));
+    connect(ui->rbAdd, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
+    connect(ui->rbSub, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
 
     button_group = new QButtonGroup();
     button_group->addButton(ui->rbBilinear, 0);
     button_group->addButton(ui->rbNeighbor, 1);
-
-    ui->modifiedImg->installEventFilter(this);
 }
 
 MainWindow::~MainWindow()
@@ -30,7 +31,6 @@ void MainWindow::select_image()
     file_name = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("Images (*.png *.xpm *.jpg)"));
 
     if(!file_name.isEmpty()) {
-        ui->imgLineEdit->setText(file_name);
         pixmap.load(file_name);
         ui->modifiedImg->setPixmap(pixmap);
         dst_image = src_image = cv::imread(file_name.toStdString());
@@ -60,6 +60,14 @@ void MainWindow::resize_image()
         }
         this->save_image();
     }
+}
+
+void MainWindow::rotate_image()
+{
+    double angle = ui->sliderRotation->value();
+    dst_image = cvip::rotate(src_image, angle);
+    statusBar()->showMessage("Ângulo: " + QString::number(angle));
+    this->save_image();
 }
 
 void MainWindow::flip_image() {
@@ -96,27 +104,39 @@ void MainWindow::save_image() {
     ui->modifiedImg->setPixmap(pixmap);
 }
 
-bool MainWindow::eventFilter(QObject *object, QEvent *event) {
-    QPoint pos;
+void MainWindow::on_pushButton_clicked()
+{
+    auto x1 = ui->lnX1->text().toFloat();
+    auto y1 = ui->lnY1->text().toFloat();
+    auto x2 = ui->lnX2->text().toFloat();
+    auto y2 = ui->lnY2->text().toFloat();
 
-    if (object == ui->modifiedImg) {
-        if(event->type() == QEvent::MouseButtonPress) {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+    auto eucd = cvip::euclidean_distance(x1, y1, x2, y2);
+    auto city_block = cvip::city_block_distance(x1, y1, x2, y2);
+    auto chess = cvip::chessboard_distance(x1, y1, x2, y2);
 
-            if(mouseEvent->button() == Qt::LeftButton) {
-                QPainter painter(&pixmap);
-                painter.setPen(Qt::blue);
-                painter.drawLine(mouseEvent->pos().x(), mouseEvent->pos().y(), 500, 500);
-                ui->modifiedImg->setPixmap(pixmap);
-                std::cout << mouseEvent->pos().x() << " " << mouseEvent->pos().y() << std::endl;
-                return true;
-            }
-            return false;
-        }
-        if(event->type() == QEvent::MouseMove) {
-            //case QEvent::MouseMove:
-            return true;
-        }
+    ui->lnEucd->setText(QString::number(eucd, 'f', 3));
+    ui->lnD4->setText(QString::number(city_block));
+    ui->lnD8->setText(QString::number(chess));
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QString file_name = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("Images (*.png *.xpm *.jpg)"));
+
+    if(!file_name.isEmpty()) {
+        ui->tmpImage->setPixmap(QPixmap(file_name).scaled(ui->tmpImage->width(), ui->tmpImage->height(), Qt::KeepAspectRatio));
+        tmp_image = cv::imread(file_name.toStdString());
     }
-    return false;
+}
+
+void MainWindow::arithmetic() {
+
+    if(ui->rbAdd->isChecked())
+        dst_image = cvip::addition(dst_image, tmp_image);
+
+    if(ui->rbSub->isChecked())
+        dst_image = cvip::subtraction(dst_image, tmp_image);
+
+    this->save_image();
 }
