@@ -6,6 +6,8 @@ Algoritmos inclusos:
 - Interpolação bilinear
 - Interpolação por vizinho mais próximo
 - Flip horizontal e vertical
+- Distâncias Euclidiana, D4 e D8
+- Adição e subtração de imagens
 
 Como usar
 -------------
