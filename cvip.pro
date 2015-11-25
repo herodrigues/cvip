@@ -42,4 +42,5 @@ DISTFILES += \
     doc/* \
     doc/distances.md \
     doc/geometric.md \
-    doc/intensity.md
+    doc/intensity.md \
+    doc/arithmetic.md
