@@ -29,10 +29,11 @@ private slots:
     void resize_image();
     void flip_image();
     void select_image();
-    void rotate_image();
     void arithmetic();
-    void on_pushButton_clicked();
-    void on_pushButton_3_clicked();
+    void on_btnTranslate_clicked();
+    void on_btnCalcDistance_clicked();
+    void on_btnLoadTmpImg_clicked();
+    void on_btnStretch_clicked();
 
 private:
     Ui::MainWindow *ui;

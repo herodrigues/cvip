@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->sliderWidth, SIGNAL(valueChanged(int)), this, SLOT(resize_image()));
     connect(ui->rbHFlip, SIGNAL(clicked(bool)), this, SLOT(flip_image()));
     connect(ui->rbVFlip, SIGNAL(clicked(bool)), this, SLOT(flip_image()));
-    connect(ui->sliderRotation, SIGNAL(valueChanged(int)), this, SLOT(rotate_image()));
     connect(ui->actionOpenImage, SIGNAL(triggered(bool)),this, SLOT(select_image()));
     connect(ui->rbAdd, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
     connect(ui->rbSub, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
@@ -62,14 +61,6 @@ void MainWindow::resize_image()
     }
 }
 
-void MainWindow::rotate_image()
-{
-    double angle = ui->sliderRotation->value();
-    dst_image = cvip::rotate(src_image, angle);
-    statusBar()->showMessage("Ângulo: " + QString::number(angle));
-    this->save_image();
-}
-
 void MainWindow::flip_image() {
 
     if(ui->rbHFlip->isChecked()) {
@@ -104,7 +95,7 @@ void MainWindow::save_image() {
     ui->modifiedImg->setPixmap(pixmap);
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_btnCalcDistance_clicked()
 {
     auto x1 = ui->lnX1->text().toFloat();
     auto y1 = ui->lnY1->text().toFloat();
@@ -120,7 +111,27 @@ void MainWindow::on_pushButton_clicked()
     ui->lnD8->setText(QString::number(chess));
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::arithmetic() {
+
+    if(ui->rbAdd->isChecked())
+        dst_image = cvip::addition(dst_image, tmp_image);
+
+    if(ui->rbSub->isChecked())
+        dst_image = cvip::subtraction(dst_image, tmp_image);
+
+    this->save_image();
+}
+
+void MainWindow::on_btnTranslate_clicked()
+{
+    int x = ui->lnTransX->text().toInt();
+    int y = ui->lnTransY->text().toInt();
+
+    dst_image = cvip::translate(dst_image, x, y);
+    this->save_image();
+}
+
+void MainWindow::on_btnLoadTmpImg_clicked()
 {
     QString file_name = QFileDialog::getOpenFileName(this, tr("Open File"), "/home", tr("Images (*.png *.xpm *.jpg)"));
 
@@ -130,13 +141,14 @@ void MainWindow::on_pushButton_3_clicked()
     }
 }
 
-void MainWindow::arithmetic() {
+void MainWindow::on_btnStretch_clicked()
+{
+    float r1 = ui->lnR1->text().toFloat();
+    float r2 = ui->lnR2->text().toFloat();
+    float s1 = ui->lnS1->text().toFloat();
+    float s2 = ui->lnS2->text().toFloat();
 
-    if(ui->rbAdd->isChecked())
-        dst_image = cvip::addition(dst_image, tmp_image);
-
-    if(ui->rbSub->isChecked())
-        dst_image = cvip::subtraction(dst_image, tmp_image);
+    dst_image = cvip::contrast_stretch(src_image, r1, r2, s1, s2);
 
     this->save_image();
 }

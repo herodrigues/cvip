@@ -39,4 +39,7 @@ DISTFILES += \
     img/tux.png \
     README.md \
     .gitignore \
-    doc/*
+    doc/* \
+    doc/distances.md \
+    doc/geometric.md \
+    doc/intensity.md

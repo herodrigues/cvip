@@ -134,25 +134,23 @@ namespace cvip {
     }
 
     /**
-     * Rotaciona a imagem
+     * Translada a imagem
      *
      * @param src_img Referência para a matriz da imagem
-     * @param angle Ângulo de rotação
+     * @param x Nova coordenada x da origem da imagem
+     * @param y Nova coordenada y da origem da imagem
      * @return Matriz resultante
      */
     template<typename T>
-    cv::Mat_<T> rotate(cv::Mat_<T> &src_img, double angle) {
+    cv::Mat_<T> translate(cv::Mat_<T> &src_img, int x, int y) {
 
-        cv::Mat_<T> output = cv::Mat_<T>(src_img.rows, src_img.cols);
-        int width = output.rows;
-        int height = output.cols;
-
-        double cos_a = cos(angle * M_PI / 180);
-        double sin_a = sin(angle * M_PI / 180);
+        cv::Mat_<T> output = cv::Mat_<T>::zeros(src_img.rows + x, src_img.cols + y);
+        int width = src_img.rows;
+        int height = src_img.cols;
 
         for(int row = 0; row < width; row++)
             for(int col = 0; col < height; col++)
-                output(row, col) = src_img(row * cos_a + col * sin_a, col * cos_a - sin_a);
+                output(row + x, col + y) = src_img(row, col);
 
         return output;
     }
@@ -174,8 +172,41 @@ namespace cvip {
 
         for(int row = 0; row < width; row++)
             for(int col = 0; col < height; col++)
-                output(row, col) = src_img(row, col) + tmp_img(row, col);
+                output(row, col) = (src_img(row, col) + tmp_img(row, col)) / 2;
 
+        return output;
+    }
+
+    /**
+     * Altera o contraste de uma imagem
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @param r1 Coordenada r1 do ponto P(r1, r2) que controla o formato da transformação
+     * @param r2 Coordenada r2 do ponto P(r1, r2) que controla o formato da transformação
+     * @param s1 Coordenada s1 do ponto P(s1, s2) que controla o formato da transformação
+     * @param s2 Coordenada s2 do ponto P(s1, s2) que controla o formato da transformação
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> contrast_stretch(cv::Mat_<T> &src_img, float r1, float r2, float s1, float s2) {
+
+        cv::Mat_<T> output = src_img.clone();
+        int width = output.rows;
+        int height = output.cols;
+        float result;
+
+        for(int row = 0; row < width; row++) {
+            for(int col = 0; col < height; col++) {
+                if(row >= 0 && row <= r1) {
+                    result = s1/r1 * row;
+                } else if(r1 < row && row <= r2) {
+                    result = ((s2 - s1) / (r2 - r1)) * (row - r1) + s1;
+                } else if(r2 < row && row <= 255) {
+                    result = ((255 - s2) / (255 - r2)) * (row - r2) + s2;
+                }
+                output(col, row) = cv::saturate_cast<uchar>(int(result));
+            }
+        }
         return output;
     }
 
