@@ -273,6 +273,66 @@ namespace cvip {
     inline T chessboard_distance(T x1, T y1, T x2, T y2) {
         return std::max(abs(x1-x2), abs(y1-y2));
     }
+
+    /**
+     * Conta o número de pixels para cada valor de intensidade
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @return Matriz resultante
+     */
+    template<typename T>
+    const std::vector<int> histogram(cv::Mat_<T> &src_img) {
+        std::vector<int> hist(255, 0);
+
+        for(int row = 0; row < src_img.rows; row++)
+            for(int col = 0; col < src_img.cols; col++)
+                hist[(int) src_img(row, col)[0]]++;
+
+        return hist;
+    }
+
+    /**
+     * Gera frequência cumulativa do histograma
+     *
+     * @param hist Histograma da imagem
+     * @return Frequência cumulativa
+     */
+    template<typename T>
+    T frequency(T &hist) {
+        T freq(255, 0);
+        freq[0] = hist[0];
+
+        for(int i = 1; i < 256; i++)
+            freq[i] = hist[i] + freq[i-1];
+
+        return freq;
+    }
+
+    /**
+     * Exibe histograma
+     *
+     * @param hist Histograma da imagem
+     * @return Frequência cumulativa
+     */
+    template<typename T>
+    void show_histogram(T hist, std::string title) {
+        int width = 512;
+        int height = 400;
+        int ratio = cvRound((double) width / 256);
+
+        cv::Mat hist_image(height, width, CV_8UC1, cv::Scalar(255, 255, 255));
+
+        int max = *std::max_element(hist.begin(), hist.end());
+
+        for(int i = 0; i < 256; i++)
+            hist[i] = ((double) hist[i] / max) * hist_image.rows;
+
+        for(int i = 0; i < 256; i++)
+            cv::line(hist_image, cv::Point(ratio * i, height), cv::Point(ratio * i, height - hist[i]),
+                     cv::Scalar(0,0,0), 1, 8, 0);
+
+        cv::imshow(title, hist_image);
+    }
 }
 
 #endif // CVIP_H

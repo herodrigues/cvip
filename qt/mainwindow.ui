@@ -65,9 +65,6 @@
         <property name="text">
          <string/>
         </property>
-        <property name="pixmap">
-         <pixmap>../img/lena.png</pixmap>
-        </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
@@ -76,7 +73,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -749,7 +746,15 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuHistograma">
+    <property name="title">
+     <string>Histograma</string>
+    </property>
+    <addaction name="actionOriginal"/>
+    <addaction name="actionEqualizado"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuHistograma"/>
    <addaction name="menuHel"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -776,6 +781,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionOriginal">
+   <property name="text">
+    <string>Original</string>
+   </property>
+  </action>
+  <action name="actionEqualizado">
+   <property name="text">
+    <string>Equalizado</string>
    </property>
   </action>
  </widget>

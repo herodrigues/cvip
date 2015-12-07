@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpenImage, SIGNAL(triggered(bool)),this, SLOT(select_image()));
     connect(ui->rbAdd, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
     connect(ui->rbSub, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
+    connect(ui->actionOriginal, SIGNAL(triggered(bool)), this, SLOT(show_histogram()));
+    connect(ui->actionEqualizado, SIGNAL(triggered(bool)), this, SLOT(show_equalized_hist()));
 
     button_group = new QButtonGroup();
     button_group->addButton(ui->rbBilinear, 0);
@@ -34,6 +36,45 @@ void MainWindow::select_image()
         ui->modifiedImg->setPixmap(pixmap);
         dst_image = src_image = cv::imread(file_name.toStdString());
     }
+}
+
+void MainWindow::show_histogram() {
+    std::vector<int> hist = cvip::histogram(src_image);
+    cvip::show_histogram(hist, "Histograma da imagem original");
+}
+
+void MainWindow::show_equalized_hist() {
+    auto hist = cvip::histogram(src_image);
+    int size = src_image.rows * src_image.cols;
+    float ratio = 255.0 / size;
+
+    std::vector<float> pr_rk;
+    auto freq = cvip::frequency(hist);
+    std::vector<float> ps_sk(255, 0);
+    std::vector<int> result;
+    std::vector<int> norm;
+
+    for(int i = 0; i < 256; i++)
+        pr_rk.push_back((double) hist[i] / size);
+
+    for(int i = 0; i < 256; i++)
+        norm.push_back(cvRound((double) freq[i] * ratio));
+
+    for(int i = 0; i < 256; i++)
+        ps_sk[norm[i]] += pr_rk[i];
+
+    for(int i = 0; i < 256; i++)
+        result.push_back(cvRound(ps_sk[i] * 255));
+
+    for(int row = 0; row < src_image.rows; row++)
+        for(int col = 0; col < src_image.cols; col++) {
+            dst_image(row, col)[0] = norm[src_image(row, col)[0]];
+            dst_image(row, col)[1] = norm[src_image(row, col)[0]];
+            dst_image(row, col)[2] = norm[src_image(row, col)[0]];
+        }
+
+    cvip::show_histogram(result, "Histograma da imagem equalizada");
+    this->save_image();
 }
 
 void MainWindow::resize_image()

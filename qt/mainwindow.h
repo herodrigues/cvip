@@ -30,6 +30,8 @@ private slots:
     void flip_image();
     void select_image();
     void arithmetic();
+    void show_histogram();
+    void show_equalized_hist();
     void on_btnTranslate_clicked();
     void on_btnCalcDistance_clicked();
     void on_btnLoadTmpImg_clicked();
