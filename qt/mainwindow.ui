@@ -748,10 +748,17 @@
    </widget>
    <widget class="QMenu" name="menuHistograma">
     <property name="title">
-     <string>Histograma</string>
+     <string>Ferramentas</string>
     </property>
-    <addaction name="actionOriginal"/>
-    <addaction name="actionEqualizado"/>
+    <widget class="QMenu" name="menuHistograma_2">
+     <property name="title">
+      <string>Histograma</string>
+     </property>
+     <addaction name="actionOriginal"/>
+     <addaction name="actionEqualized"/>
+    </widget>
+    <addaction name="menuHistograma_2"/>
+    <addaction name="actionMedianFilter"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHistograma"/>
@@ -788,9 +795,14 @@
     <string>Original</string>
    </property>
   </action>
-  <action name="actionEqualizado">
+  <action name="actionEqualized">
    <property name="text">
     <string>Equalizado</string>
+   </property>
+  </action>
+  <action name="actionMedianFilter">
+   <property name="text">
+    <string>Filtro da média</string>
    </property>
   </action>
  </widget>

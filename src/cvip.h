@@ -333,6 +333,45 @@ namespace cvip {
 
         cv::imshow(title, hist_image);
     }
+
+    /**
+     * Calcula o filtro da média
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> median_filter(cv::Mat_<T> &src_img) {
+        cv::Mat_<T> dst_img = cv::Mat_<T>(src_img.rows + 1, src_img.cols + 1);
+
+        for(int row = 1; row < dst_img.rows - 1; row++)
+            for(int col = 1; col < dst_img.cols - 1; col++)
+                dst_img(row, col) = src_img(row - 1, col - 1);
+
+        std::vector<int> square(9, 0);
+
+        for(int row = 1; row < dst_img.rows - 1; row++) {
+            for(int col = 1; col < dst_img.cols - 1; col++) {
+
+                square[0] = dst_img(row - 1 , col - 1)[0];
+                square[1] = dst_img(row, col - 1)[0];
+                square[2] = dst_img(row + 1, col - 1)[0];
+                square[3] = dst_img(row - 1, col)[0];
+                square[4] = dst_img(row, col)[0];
+                square[5] = dst_img(row + 1, col)[0];
+                square[6] = dst_img(row - 1, col + 1)[0];
+                square[7] = dst_img(row, col + 1)[0];
+                square[8] = src_img(row + 1, col + 1)[0];
+
+                double median = std::accumulate(square.begin(), square.end(), 0) / 9.0;
+                src_img(row, col)[0] = cvRound(median);
+                src_img(row, col)[1] = cvRound(median);
+                src_img(row, col)[2] = cvRound(median);
+            }
+        }
+
+        return src_img;
+    }
 }
 
 #endif // CVIP_H

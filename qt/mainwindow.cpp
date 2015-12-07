@@ -15,7 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->rbAdd, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
     connect(ui->rbSub, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
     connect(ui->actionOriginal, SIGNAL(triggered(bool)), this, SLOT(show_histogram()));
-    connect(ui->actionEqualizado, SIGNAL(triggered(bool)), this, SLOT(show_equalized_hist()));
+    connect(ui->actionEqualized, SIGNAL(triggered(bool)), this, SLOT(show_equalized_hist()));
+    connect(ui->actionMedianFilter, SIGNAL(triggered(bool)), this, SLOT(filters()));
 
     button_group = new QButtonGroup();
     button_group->addButton(ui->rbBilinear, 0);
@@ -41,6 +42,11 @@ void MainWindow::select_image()
 void MainWindow::show_histogram() {
     std::vector<int> hist = cvip::histogram(src_image);
     cvip::show_histogram(hist, "Histograma da imagem original");
+}
+
+void MainWindow::filters() {
+    dst_image = cvip::median_filter(src_image);
+    this->save_image();
 }
 
 void MainWindow::show_equalized_hist() {
