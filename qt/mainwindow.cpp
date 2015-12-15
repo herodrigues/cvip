@@ -16,7 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->rbSub, SIGNAL(clicked(bool)), this, SLOT(arithmetic()));
     connect(ui->actionOriginal, SIGNAL(triggered(bool)), this, SLOT(show_histogram()));
     connect(ui->actionEqualized, SIGNAL(triggered(bool)), this, SLOT(show_equalized_hist()));
-    connect(ui->actionMedianFilter, SIGNAL(triggered(bool)), this, SLOT(filters()));
+    connect(ui->actionMedianFilter, SIGNAL(triggered(bool)), this, SLOT(median_filter()));
+    connect(ui->actionMask1, SIGNAL(triggered(bool)), this, SLOT(laplace_filter1()));
+    connect(ui->actionMask2, SIGNAL(triggered(bool)), this, SLOT(laplace_filter2()));
+    connect(ui->actionMask3, SIGNAL(triggered(bool)), this, SLOT(laplace_filter3()));
+    connect(ui->actionMask4, SIGNAL(triggered(bool)), this, SLOT(laplace_filter4()));
+    connect(ui->actionSobelDetector, SIGNAL(triggered(bool)), this, SLOT(sobel_detector()));
 
     button_group = new QButtonGroup();
     button_group->addButton(ui->rbBilinear, 0);
@@ -44,8 +49,41 @@ void MainWindow::show_histogram() {
     cvip::show_histogram(hist, "Histograma da imagem original");
 }
 
-void MainWindow::filters() {
+void MainWindow::median_filter() {
     dst_image = cvip::median_filter(src_image);
+    this->save_image();
+}
+
+void MainWindow::laplace_filter1() {
+    int mask[9] = { 0, 1, 0, 1, -4, 1, 0, 1, 0 };
+
+    dst_image = cvip::laplace_filter(src_image, mask);
+    this->save_image();
+}
+
+void MainWindow::laplace_filter2() {
+    int mask[9] = { 1, 1,  1 , 1, -8, 1, 1, 1, 1 };
+
+    dst_image = cvip::laplace_filter(src_image, mask);
+    this->save_image();
+}
+
+void MainWindow::laplace_filter3() {
+    int mask[9] = { 0,  -1,  0, -1, 4, -1 , 0, -1, 0 };
+
+    dst_image = cvip::laplace_filter(src_image, mask);
+    this->save_image();
+}
+
+void MainWindow::laplace_filter4() {
+    int mask[9] = { -1, -1, -1, -1,  8, -1, -1, -1, -1 };
+
+    dst_image = cvip::laplace_filter(src_image, mask);
+    this->save_image();
+}
+
+void MainWindow::sobel_detector() {
+    dst_image = cvip::sobel_detector(src_image);
     this->save_image();
 }
 
@@ -60,24 +98,26 @@ void MainWindow::show_equalized_hist() {
     std::vector<int> result;
     std::vector<int> norm;
 
+    // Pr(rk)
     for(int i = 0; i < 256; i++)
         pr_rk.push_back((double) hist[i] / size);
 
+    // Eq.
     for(int i = 0; i < 256; i++)
         norm.push_back(cvRound((double) freq[i] * ratio));
 
+    // rk
     for(int i = 0; i < 256; i++)
         ps_sk[norm[i]] += pr_rk[i];
 
     for(int i = 0; i < 256; i++)
         result.push_back(cvRound(ps_sk[i] * 255));
 
+    // normalizada
     for(int row = 0; row < src_image.rows; row++)
-        for(int col = 0; col < src_image.cols; col++) {
-            dst_image(row, col)[0] = norm[src_image(row, col)[0]];
-            dst_image(row, col)[1] = norm[src_image(row, col)[0]];
-            dst_image(row, col)[2] = norm[src_image(row, col)[0]];
-        }
+        for(int col = 0; col < src_image.cols; col++)
+            for(int channel = 0; channel != cv::DataType<cv::Vec3b>::channels; channel++)
+                dst_image(row, col)[channel] = norm[src_image(row, col)[channel]];
 
     cvip::show_histogram(result, "Histograma da imagem equalizada");
     this->save_image();

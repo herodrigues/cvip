@@ -348,29 +348,121 @@ namespace cvip {
             for(int col = 1; col < dst_img.cols - 1; col++)
                 dst_img(row, col) = src_img(row - 1, col - 1);
 
-        std::vector<int> square(9, 0);
 
         for(int row = 1; row < dst_img.rows - 1; row++) {
             for(int col = 1; col < dst_img.cols - 1; col++) {
+                for(int channel = 0; channel != cv::DataType<T>::channels; channel++) {
+                    std::vector<int> square(9, 0);
 
-                square[0] = dst_img(row - 1 , col - 1)[0];
-                square[1] = dst_img(row, col - 1)[0];
-                square[2] = dst_img(row + 1, col - 1)[0];
-                square[3] = dst_img(row - 1, col)[0];
-                square[4] = dst_img(row, col)[0];
-                square[5] = dst_img(row + 1, col)[0];
-                square[6] = dst_img(row - 1, col + 1)[0];
-                square[7] = dst_img(row, col + 1)[0];
-                square[8] = src_img(row + 1, col + 1)[0];
+                    square[0] = dst_img(row - 1 , col - 1)[channel];
+                    square[1] = dst_img(row, col - 1)[channel];
+                    square[2] = dst_img(row + 1, col - 1)[channel];
+                    square[3] = dst_img(row - 1, col)[channel];
+                    square[4] = dst_img(row, col)[channel];
+                    square[5] = dst_img(row + 1, col)[channel];
+                    square[6] = dst_img(row - 1, col + 1)[channel];
+                    square[7] = dst_img(row, col + 1)[channel];
+                    square[8] = dst_img(row + 1, col + 1)[channel];
 
-                double median = std::accumulate(square.begin(), square.end(), 0) / 9.0;
-                src_img(row, col)[0] = cvRound(median);
-                src_img(row, col)[1] = cvRound(median);
-                src_img(row, col)[2] = cvRound(median);
+                    double median = std::accumulate(square.begin(), square.end(), 0) / 9.0;
+                    dst_img(row, col)[channel] = cvRound(median);
+                }
             }
         }
 
-        return src_img;
+        return dst_img;
+    }
+
+    /**
+     * Filtro laplaciano
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @param mask Máscara do filtro
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> laplace_filter(cv::Mat_<T> &src_img, int mask[9]) {
+        cv::Mat_<T> dst_img = src_img.clone();
+
+        for(int row = 1; row < dst_img.rows - 1; row++) {
+            for(int col = 1; col < dst_img.cols - 1; col++) {            
+                for(int channel = 0; channel != cv::DataType<T>::channels; channel++) {
+                    int sum = 0;
+
+                    sum += mask[0] * src_img(row - 1 , col - 1)[channel];
+                    sum += mask[1] * src_img(row, col - 1)[channel];
+                    sum += mask[2] * src_img(row + 1, col - 1)[channel];
+                    sum += mask[3] * src_img(row - 1, col)[channel];
+                    sum += mask[4] * src_img(row, col)[channel];
+                    sum += mask[5] * src_img(row + 1, col)[channel];
+                    sum += mask[6] * src_img(row - 1, col + 1)[channel];
+                    sum += mask[7] * src_img(row, col + 1)[channel];
+                    sum += mask[8] * src_img(row + 1, col + 1)[channel];
+
+                    dst_img(row, col)[channel] = (uchar) std::min(255, std::max(0, sum));
+                }
+            }
+        }
+
+        return dst_img;
+    }
+
+    /**
+     * Detector de Sobel
+     *
+     * @param src_img Referência para a matriz da imagem
+     * @return Matriz resultante
+     */
+    template<typename T>
+    cv::Mat_<T> sobel_detector(cv::Mat_<T> &src_img) {
+        cv::Mat_<T> dst_img = src_img.clone();
+
+        // Aplicando primeira másccara
+        for(int row = 1; row < dst_img.rows - 1; row++) {
+            for(int col = 1; col < dst_img.cols - 1; col++) {
+                for(int channel = 0; channel != cv::DataType<T>::channels; channel++) {
+                    int sum = 0;
+                    int mask[9] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
+
+                    sum += mask[0] * src_img(row - 1 , col - 1)[channel];
+                    sum += mask[1] * src_img(row, col - 1)[channel];
+                    sum += mask[2] * src_img(row + 1, col - 1)[channel];
+                    sum += mask[3] * src_img(row - 1, col)[channel];
+                    sum += mask[4] * src_img(row, col)[channel];
+                    sum += mask[5] * src_img(row + 1, col)[channel];
+                    sum += mask[6] * src_img(row - 1, col + 1)[channel];
+                    sum += mask[7] * src_img(row, col + 1)[channel];
+                    sum += mask[8] * src_img(row + 1, col + 1)[channel];
+
+                    dst_img(row, col)[channel] = (uchar) std::min(255, std::max(0, sum));
+                }
+            }
+        }
+        cv::Mat_<T> out_img = dst_img.clone();
+
+        // Aplicando segunda máscara
+        for(int row = 1; row < out_img.rows - 1; row++) {
+            for(int col = 1; col < out_img.cols - 1; col++) {
+                for(int channel = 0; channel != cv::DataType<T>::channels; channel++) {
+                    int sum = 0;
+                    int mask[9] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
+
+                    sum += mask[0] * dst_img(row - 1 , col - 1)[channel];
+                    sum += mask[1] * dst_img(row, col - 1)[channel];
+                    sum += mask[2] * dst_img(row + 1, col - 1)[channel];
+                    sum += mask[3] * dst_img(row - 1, col)[channel];
+                    sum += mask[4] * dst_img(row, col)[channel];
+                    sum += mask[5] * dst_img(row + 1, col)[channel];
+                    sum += mask[6] * dst_img(row - 1, col + 1)[channel];
+                    sum += mask[7] * dst_img(row, col + 1)[channel];
+                    sum += mask[8] * dst_img(row + 1, col + 1)[channel];
+
+                    out_img(row, col)[channel] = (uchar) std::min(255, std::max(0, sum));
+                }
+            }
+        }
+
+        return out_img;
     }
 }
 

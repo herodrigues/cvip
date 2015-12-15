@@ -32,7 +32,12 @@ private slots:
     void arithmetic();
     void show_histogram();
     void show_equalized_hist();
-    void filters();
+    void median_filter();
+    void laplace_filter1();
+    void laplace_filter2();
+    void laplace_filter3();
+    void laplace_filter4();
+    void sobel_detector();
     void on_btnTranslate_clicked();
     void on_btnCalcDistance_clicked();
     void on_btnLoadTmpImg_clicked();
